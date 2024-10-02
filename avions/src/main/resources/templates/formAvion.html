@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+
+<head>
+	<meta charset="utf-8">
+	<title>Ajout des Avions</title>
+</head>
+
+<body>
+	<div th:replace="template"></div>
+	<div class="container mt-5">
+		<div class="card">
+			
+			<div class="card-header" th:if="${mode=='new'}"> Ajout des Avions </div>
+			<div class="card-header" th:if="${mode=='edit'}">Modification des Avions </div>
+			
+			<div class="card-body">
+				<form th:action="@{saveAvion}" method="post">
+					
+					
+					<input hidden name="page" class="form-control" th:value="${page}" />
+					<input hidden name="size" class="form-control" th:value="${size}" />
+					
+					<div class="form-group">
+						<label class="control-label" hidden>ID Avion :</label>
+						<input type="hidden" name="idAvion" class="form-control" th:value="${avion.idAvion}" />
+					</div>
+
+					<div class="form-group">
+						<label class="control-label">Matricule Avion :</label>
+						<input type="text" name="matriculeAvion" class="form-control" 
+						th:value="${avion.matriculeAvion}" />
+						<span th:errors= ${avion.matriculeAvion} class="text-danger"> </span>
+
+					</div>
+					<div class="form-group">
+						<label class="control-label">kilométrage Avion :</label>
+						<input type="text" name="celometrageAvion" class="form-control"
+						th:value="${avion.celometrageAvion}" />
+						<span th:errors= ${avion.celometrageAvion} class="text-danger"> </span>
+					</div>
+					<div class="form-group">
+						<label class="control-label">Date fabrication :</label>
+						<input type="date" name="dateFabrication" class="form-control"
+						th:value="${avion.dateFabrication}" />
+						<span th:errors= ${avion.dateFabrication} class="text-danger"> </span>
+					</div>
+					
+					<!--Affecter une categorie a un produit -->
+					<div class="form-group">
+						<label class="control-label">Type Avion :</label>
+						<select name="typeAv" class="form-control" th:value="${avion.typeAv.idAv}"
+							th:if="${!#strings.isEmpty(avion.typeAv)}">
+							<option th:each="c:${typeAvs}" th:if="${mode=='edit'}" th:value="${c.idAv}" th:text="${c.matriculeAv}"
+								th:selected="${ c.idAv==avion.typeAv.idAv}">
+							</option>
+						</select>
+						<!-- s'il s'agit d'un ajout (mode==new) ou d'une modification d'un avion ayant une catégorie null -->
+						<select name="typeAv" class="form-control" th:if="${#strings.isEmpty(avion.typeAv)}">
+							<option th:each="c:${typeAvs}" th:value="${c.idAv}" th:text="${c.matriculeAv}">
+							</option>
+						</select>
+					</div>
+
+					
+					<div>
+						<button type="submit" class="btn btn-primary">Valider</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
